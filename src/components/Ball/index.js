@@ -82,9 +82,9 @@ class Ball extends React.Component{
         const GameBoard = document.querySelector("#GameBoard");
         const GameBoardTop = GameBoard.offsetTop;
         const GameBoardBottom = GameBoard.offsetTop + GameBoard.clientHeight;
-        if(BallTop <= GameBoardTop || BallBottom >= GameBoardBottom){
-            console.log("check Wall Collision")
-            this.props.stopBall();
+        const GameBoardBorder = parseInt(getComputedStyle(GameBoard).borderTop);
+        if(BallTop <= (GameBoardTop - (GameBoardBorder * 2)) || BallBottom >= (GameBoardBottom - (GameBoardBorder * 2))){
+            this.props.collideWithWall();
         }
         if(!ballCollision){
             this.props.updateBall(left,top)
