@@ -23,9 +23,38 @@ class Ball extends React.Component{
                 left + moveSpeed
 
         //check for player collision
-        
         if(left <= paddleState.width){
-            this.props.checkPlayerCollision();
+            const PlayerPaddle = document.querySelector("#PlayerPaddle");
+            const PaddleTop = PlayerPaddle.offsetTop;
+            const PaddleBottom = PlayerPaddle.offsetTop + PlayerPaddle.clientHeight;
+            const PaddleMiddle = (PaddleTop + PaddleBottom) / 2; 
+
+            const BallTop = Ball.offsetTop;
+            const BallBottom = Ball.offsetTop + Ball.clientHeight;
+            const BallMiddle = (BallTop + BallBottom) / 2;
+            
+            const BallPoints = [BallTop,BallMiddle,BallBottom];
+            const PlayerPoints = [PaddleTop,PaddleMiddle,PaddleBottom];
+            
+            let CollidedWithPaddle = false;
+
+            BallPoints.forEach(point=>{
+                if(point >= PaddleTop && point <= PaddleBottom || point <= PaddleBottom && point >= PaddleTop){
+                    CollidedWithPaddle = true;
+                }
+            })
+            //collided with player
+            if(CollidedWithPaddle){
+                let newY;
+                this.props.collidedWithPlayer();
+                //check where it collided
+
+                //direct middle collision
+                if(BallMiddle === PaddleMiddle){
+                    newY = 0;
+                }
+            }
+            //did not collide
         }
         if(!ballCollision){
             this.props.updateBall(left,top)

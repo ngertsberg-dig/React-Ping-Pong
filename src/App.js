@@ -29,7 +29,7 @@ class App extends React.Component{
     super();
     this.updatePaddleTop = this.updatePaddleTop.bind(this);
     this.updateBall = this.updateBall.bind(this);
-    this.checkPlayerCollision = this.checkPlayerCollision.bind(this);
+    this.collidedWithPlayer = this.collidedWithPlayer.bind(this);
   }
 
   componentDidMount(){
@@ -61,13 +61,14 @@ class App extends React.Component{
     })
   }
 
-  checkPlayerCollision(){
+  collidedWithPlayer(){
     this.setState(state=>{
       let newBall = {...state.ball}
       newBall.ballCollision = true;
       return { ball: newBall };
     })
   }
+  
   updateBall(x,y){
     this.setState(state => {
       let newBall = {...state.ball};
@@ -86,7 +87,7 @@ class App extends React.Component{
               :
                 <React.Fragment>
                   <PlayerPaddle updatePaddleTop = {this.updatePaddleTop} paddleState = {this.state.paddle} />
-                  <Ball checkPlayerCollision = {this.checkPlayerCollision} updateBall = {this.updateBall} ballState = {this.state.ball} paddleState = {this.state.paddle} />
+                  <Ball collidedWithPlayer = {this.collidedWithPlayer} updateBall = {this.updateBall} ballState = {this.state.ball} paddleState = {this.state.paddle} />
                 </React.Fragment>
         }
         </div>
