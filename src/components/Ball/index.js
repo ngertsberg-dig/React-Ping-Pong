@@ -14,7 +14,7 @@ class Ball extends React.Component{
         
         let { left, top, direction, directionY} = ballState;
         const { moveSpeed, ballCollision, directionYSpeed } = ballState;
-
+        
         const BallTop = Ball.offsetTop;
         const BallBottom = Ball.offsetTop + Ball.clientHeight;
         const BallMiddle = (BallTop + BallBottom) / 2;
@@ -56,7 +56,6 @@ class Ball extends React.Component{
             //collided with player
             if(CollidedWithPaddle){
                 let newY;
-                this.props.collidedWithPlayer();
                 //check where it collided
 
                 //direct middle collision
@@ -83,7 +82,7 @@ class Ball extends React.Component{
         const GameBoardTop = GameBoard.offsetTop;
         const GameBoardBottom = GameBoard.offsetTop + GameBoard.clientHeight;
         const GameBoardBorder = parseInt(getComputedStyle(GameBoard).borderTop);
-        if(BallTop <= (GameBoardTop - (GameBoardBorder * 2)) || BallBottom >= (GameBoardBottom - (GameBoardBorder * 2))){
+        if(BallTop <= (GameBoardTop - (GameBoardBorder * 2)) && directionY === "-"|| BallBottom >= (GameBoardBottom - (GameBoardBorder * 2)) && directionY === "+"){
             this.props.collideWithWall();
         }
         if(!ballCollision){
