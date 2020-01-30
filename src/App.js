@@ -7,6 +7,8 @@ import Ball from './components/Ball';
 
 class App extends React.Component{
   state={
+    gameWinner: null,
+    gameOver: false,
     gameLoading: true,
     ball:{
       width: 20,
@@ -43,6 +45,8 @@ class App extends React.Component{
     this.collideWithWall = this.collideWithWall.bind(this);
     this.updateAI = this.updateAI.bind(this);
     this.collidedWithAI = this.collidedWithAI.bind(this);
+    this.playerLost = this.playerLost.bind(this);
+    this.restartGame = this.restartGame.bind(this);
   }
 
   componentDidMount(){
@@ -129,6 +133,14 @@ class App extends React.Component{
     })
   }
 
+  playerLost(){
+    this.setState({gameOver:true});
+  }
+
+  restartGame(){
+    window.location.reload()
+  }
+
   render(){
     return (
       <div className="App" id = 'GameBoard'>
@@ -138,12 +150,15 @@ class App extends React.Component{
               :
                 <React.Fragment>
 
-                  <PlayerPaddle 
+                  <PlayerPaddle
+                    gameOver = {this.state.gameOver} 
                     updatePaddleTop = {this.updatePaddleTop} 
                     paddleState = {this.state.paddle} 
                   />
 
-                  <Ball 
+                  <Ball
+                    playerLost = {this.playerLost}
+                    gameOver = {this.state.gameOver} 
                     collideWithWall={this.collideWithWall} 
                     stopBall = {this.stopBall} 
                     collidedWithPlayer = {this.collidedWithPlayer} 
@@ -154,12 +169,21 @@ class App extends React.Component{
                     collidedWithAI = {this.collidedWithAI}
                   />
 
-                  <AIPaddle 
+                  <AIPaddle
+                    gameOver = {this.state.gameOver} 
                     updateAI = {this.updateAI}
                     paddleState = {this.state.AIPaddle} 
                     ballState = {this.state.ball}
                   />
                 </React.Fragment>
+        }
+        {
+          this.state.gameOver &&(
+            <div id = 'gameOver'>
+              <h1>You Lost..</h1>
+              <button onClick = {this.restartGame} id = 'restartGame'>Restart</button>
+            </div>
+          )
         }
         </div>
     );

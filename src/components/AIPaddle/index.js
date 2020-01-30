@@ -2,12 +2,14 @@ import React from 'react';
 
 class AIPaddle extends React.Component{
     componentDidMount(){
-        setInterval(()=>{
+        const AIMovements = setInterval(()=>{
             this.moveAI();
+            if(this.props.gameOver){
+                clearInterval(AIMovements);
+            }
         },100)
     }
     moveAI(){
-        
         const AIPaddle = document.querySelector("#AIPaddle");
         const PaddleMiddle = (AIPaddle.clientHeight / 2) + AIPaddle.offsetTop;
         const { paddleState } = this.props;
@@ -16,14 +18,7 @@ class AIPaddle extends React.Component{
         const BallMiddle = (BallHeight / 2) + BallTop;
         const PaddleTop = paddleState.top;
         let newTop = PaddleTop;
-        
-// paddleState:
-//     top: 261
-//     height: 100
-//     width: 10
-//     moveSpeed: 30
-//     left: 383
-        console.log(this.props.ballState)
+
         if(BallMiddle > PaddleMiddle){
             //move aipaddle down
             newTop = PaddleTop + paddleState.moveSpeed;

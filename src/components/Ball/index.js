@@ -3,10 +3,17 @@ import React from 'react';
 class Ball extends React.Component{
 
     componentDidMount(){
+        
         const Ball = document.querySelector("#Ball");
         const moveBall = setInterval(() => {
-            this.ballMove(Ball); 
+            this.ballMove(Ball);
+            if(this.props.gameOver){
+                setTimeout(()=>{
+                    clearInterval(moveBall);
+                },100)
+            }
         },25);
+
     }
 
     ballMove(Ball){
@@ -72,7 +79,11 @@ class Ball extends React.Component{
                 })
                 this.props.collidedWithPlayer(newY);
             }
-            //did not collide
+            else{
+                //did not collide
+                this.props.playerLost();
+            }
+
         }
 
         //check for wall collisions
