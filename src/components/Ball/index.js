@@ -40,9 +40,7 @@ class Ball extends React.Component{
             const PlayerPaddle = document.querySelector("#PlayerPaddle");
             const PaddleTop = PlayerPaddle.offsetTop;
             const PaddleBottom = PlayerPaddle.offsetTop + PlayerPaddle.clientHeight;
-            const PaddleMiddle = (PaddleTop + PaddleBottom) / 2; 
-
-
+            const PaddleMiddle = (PlayerPaddle.clientHeight / 2) + PaddleTop; 
             
             const BallPoints = [BallTop,BallMiddle,BallBottom];
             
@@ -88,7 +86,52 @@ class Ball extends React.Component{
         if(!ballCollision){
             this.props.updateBall(left,top)
         }
-       
+
+        //check for ai collision
+        const { aiPaddleState } = this.props;
+        const AITop = aiPaddleState.top;
+        const AIHeight = aiPaddleState.height;
+        const AIMiddle = (aiPaddleState.height / 2) + AITop;
+        const AIBottom = AITop + aiPaddleState.height;
+        const AIPoints = [AITop,AIMiddle,AIBottom];
+        
+        if(left >= GameBoard.clientWidth - (Ball.clientWidth + aiPaddleState.width)){
+            const PlayerPaddle = document.querySelector("#AIPaddle");
+            const PaddleTop = PlayerPaddle.offsetTop;
+            const PaddleBottom = PlayerPaddle.offsetTop + PlayerPaddle.clientHeight;
+            const PaddleMiddle = (PlayerPaddle.clientHeight / 2) + PaddleTop; 
+            
+            const BallPoints = [BallTop,BallMiddle,BallBottom];
+            
+            let CollidedWithPaddle = false;
+
+            BallPoints.forEach(point=>{
+                if(point >= PaddleTop && point <= PaddleBottom || point <= PaddleBottom && point >= PaddleTop){
+                    CollidedWithPaddle = true;
+                }
+            })
+            //collided with player
+            if(CollidedWithPaddle){
+                let newY;
+                //check where it collided
+
+                //direct middle collision
+                if(BallMiddle === PaddleMiddle){
+                    newY = "none";
+                }
+                BallPoints.forEach(point=>{
+                    //collided somewhere on the top
+                    if(point < PaddleMiddle && point > PaddleTop){
+                        newY = "-";
+                    }
+                    //collided somewhere on the bottom
+                    else if(point > PaddleMiddle && point < PaddleBottom){
+                        newY = "+";
+                    }
+                })
+                this.props.collidedWithAI(newY);
+            }
+        }
     }
 
     render(){
