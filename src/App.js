@@ -15,7 +15,9 @@ class App extends React.Component{
       left: 0,
       direction: "-",
       moveSpeed: 5,
-      ballCollision: false
+      ballCollision: false,
+      directionY: "none",
+      directionYSpeed: 5
     },
     paddle: {
       top: 0,
@@ -30,6 +32,7 @@ class App extends React.Component{
     this.updatePaddleTop = this.updatePaddleTop.bind(this);
     this.updateBall = this.updateBall.bind(this);
     this.collidedWithPlayer = this.collidedWithPlayer.bind(this);
+    this.stopBall = this.stopBall.bind(this);
   }
 
   componentDidMount(){
@@ -61,10 +64,18 @@ class App extends React.Component{
     })
   }
 
-  collidedWithPlayer(){
+  stopBall(){
     this.setState(state=>{
       let newBall = {...state.ball}
       newBall.ballCollision = true;
+      return { ball: newBall };
+    })
+  }
+  collidedWithPlayer(newY){
+    this.setState(state=>{
+      let newBall = {...state.ball}
+      newBall.direction = "+";
+      newBall.directionY = newY;
       return { ball: newBall };
     })
   }
@@ -87,7 +98,7 @@ class App extends React.Component{
               :
                 <React.Fragment>
                   <PlayerPaddle updatePaddleTop = {this.updatePaddleTop} paddleState = {this.state.paddle} />
-                  <Ball collidedWithPlayer = {this.collidedWithPlayer} updateBall = {this.updateBall} ballState = {this.state.ball} paddleState = {this.state.paddle} />
+                  <Ball stopBall = {this.stopBall} collidedWithPlayer = {this.collidedWithPlayer} updateBall = {this.updateBall} ballState = {this.state.ball} paddleState = {this.state.paddle} />
                 </React.Fragment>
         }
         </div>
