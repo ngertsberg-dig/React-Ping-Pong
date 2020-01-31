@@ -1,4 +1,5 @@
 html,body
+    color: white
     overflow: hidden
 #GameBoard
     height: calc(100vh - 4px)
@@ -23,3 +24,59 @@ html,body
         flex-direction: column
         h1
             color: white
+    #select-difficulty
+        p,ul,li
+            color: white
+        position: absolute
+        width: 100%
+        height: 100%
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        ul
+            margin: 0px
+            padding: 0px
+            li
+                list-style: none
+                background-color: white
+                color: black
+                padding: 5px
+                &:hover
+                    cursor: pointer
+                    color: red
+                    background-color: rgba(255,0,0,0.1)
+        
+#keys
+    display: flex
+    flex-direction: column
+    span
+        margin-top: 20px
+        &:nth-child(1)
+            margin-top: 0px
+
+.key__button 
+  box-sizing: border-box
+  font-size: 22px
+  line-height: 40px
+  text-align: center
+  width: 40px
+  color: #555
+  cursor: pointer
+  margin: 0 8px
+  height: 40px
+  display: flex
+  border-color: #f2f2f2
+  border-style: solid
+  text-shadow: 0 0.5px 1px #777, 0 2px 6px #f2f2f2
+  border-width: 1px
+  border-radius: 10px
+  background: -webkit-linear-gradient(top, #f9f9f9 0%, #D2D2D2 80%, #c0c0c0 100%)
+  font-family: sans-serif
+  display: inline-block
+  transition: box-shadow 0.3s ease, transform 0.15s ease
+  box-shadow: 0 0 1px #888, 0 1px 0 #fff, 0 6px 0 #C0C0C0, 0 8px 17px rgba(68, 68, 68, 0.4), 2px 1px 4px rgba(68, 68, 68, 0.25), -2px 1px 4px rgba(68, 68, 68, 0.25), 0 9px 16px rgba(68, 68, 68, 0.1)
+
+.key__button:hover, .key__button:focus 
+  box-shadow: 0 0 1px #888, 0 1px 0 #fff, 0 4px 0 #C0C0C0, 0 2px 35px rgba(68, 68, 68, 0.3), 2px 2px 4px rgba(68, 68, 68, 0.25), -2px 2px 4px rgba(68, 68, 68, 0.25), 0 7px 4px rgba(68, 68, 68, 0.1)
+  transform: translateY(2px)

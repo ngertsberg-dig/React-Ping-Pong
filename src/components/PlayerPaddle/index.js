@@ -4,16 +4,27 @@ class PlayerPaddle extends React.Component{
 
     componentDidMount(){
         const PlayerPaddle = document.querySelector("#PlayerPaddle");
-        this.playerPaddleMovement(PlayerPaddle);
+        this.playerPaddleMovement();
+        console.log(this.props.paddleState)
+        
+        setInterval(()=>{
+            const { movingDown, movingUp } = this.props.paddleState;
+            if(movingDown){
+                this.paddleMove("+",PlayerPaddle);
+            }
+            if(movingUp){
+                this.paddleMove("-",PlayerPaddle);
+            }
+        })
         
     }
 
-    
-    playerPaddleMovement(PlayerPaddle){
+    playerPaddleMovement(){
         document.addEventListener("keydown",(key)=>{
-            const KeyCode = key.code;
-            const direction = KeyCode === "KeyS" ? "+" : "-";
-            this.paddleMove(direction,PlayerPaddle);
+            this.props.playerPaddleMovementStart(key);
+        })
+        document.addEventListener("keyup",(key)=>{
+            this.props.playerPaddleMovementStop(key);
         })
     }
 

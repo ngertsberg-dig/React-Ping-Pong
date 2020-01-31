@@ -15,7 +15,47 @@ class Ball extends React.Component{
         },25);
 
     }
+    checkWin(BallTop,BallMiddle,BallBottom,whoToCheck){
+        const PlayerPaddle = whoToCheck === "player" ? document.querySelector("#PlayerPaddle") : document.querySelector("#AIPaddle");
+        const PaddleTop = PlayerPaddle.offsetTop;
+        const PaddleBottom = PlayerPaddle.offsetTop + PlayerPaddle.clientHeight;
+        const PaddleMiddle = (PlayerPaddle.clientHeight / 2) + PaddleTop; 
+        
+        const BallPoints = [BallTop,BallMiddle,BallBottom];
+        
+        let CollidedWithPaddle = false;
 
+        BallPoints.forEach(point=>{
+            if(point >= PaddleTop && point <= PaddleBottom || point <= PaddleBottom && point >= PaddleTop){
+                CollidedWithPaddle = true;
+            }
+        })
+        //collided with player
+        if(CollidedWithPaddle){
+            let newY;
+            //check where it collided
+
+            //direct middle collision
+            if(BallMiddle === PaddleMiddle){
+                newY = "none";
+            }
+            BallPoints.forEach(point=>{
+                //collided somewhere on the top
+                if(point < PaddleMiddle && point > PaddleTop){
+                    newY = "-";
+                }
+                //collided somewhere on the bottom
+                else if(point > PaddleMiddle && point < PaddleBottom){
+                    newY = "+";
+                }
+            })
+            whoToCheck === "player" ? this.props.collidedWithPlayer(newY) : this.props.collidedWithAI(newY);
+        }
+        else{
+            //did not collide
+            whoToCheck === "player" ? this.props.playerLost() : this.props.aiLost();
+        }
+    }
     ballMove(Ball){
         const { ballState } = this.props;
         
@@ -44,46 +84,7 @@ class Ball extends React.Component{
 
         //check for player collision
         if(left <= paddleState.width){
-            const PlayerPaddle = document.querySelector("#PlayerPaddle");
-            const PaddleTop = PlayerPaddle.offsetTop;
-            const PaddleBottom = PlayerPaddle.offsetTop + PlayerPaddle.clientHeight;
-            const PaddleMiddle = (PlayerPaddle.clientHeight / 2) + PaddleTop; 
-            
-            const BallPoints = [BallTop,BallMiddle,BallBottom];
-            
-            let CollidedWithPaddle = false;
-
-            BallPoints.forEach(point=>{
-                if(point >= PaddleTop && point <= PaddleBottom || point <= PaddleBottom && point >= PaddleTop){
-                    CollidedWithPaddle = true;
-                }
-            })
-            //collided with player
-            if(CollidedWithPaddle){
-                let newY;
-                //check where it collided
-
-                //direct middle collision
-                if(BallMiddle === PaddleMiddle){
-                    newY = "none";
-                }
-                BallPoints.forEach(point=>{
-                    //collided somewhere on the top
-                    if(point < PaddleMiddle && point > PaddleTop){
-                        newY = "-";
-                    }
-                    //collided somewhere on the bottom
-                    else if(point > PaddleMiddle && point < PaddleBottom){
-                        newY = "+";
-                    }
-                })
-                this.props.collidedWithPlayer(newY);
-            }
-            else{
-                //did not collide
-                this.props.playerLost();
-            }
-
+            this.checkWin(BallTop,BallMiddle,BallBottom,"player");
         }
 
         //check for wall collisions
@@ -107,41 +108,7 @@ class Ball extends React.Component{
         const AIPoints = [AITop,AIMiddle,AIBottom];
         
         if(left >= GameBoard.clientWidth - (Ball.clientWidth + aiPaddleState.width)){
-            const PlayerPaddle = document.querySelector("#AIPaddle");
-            const PaddleTop = PlayerPaddle.offsetTop;
-            const PaddleBottom = PlayerPaddle.offsetTop + PlayerPaddle.clientHeight;
-            const PaddleMiddle = (PlayerPaddle.clientHeight / 2) + PaddleTop; 
-            
-            const BallPoints = [BallTop,BallMiddle,BallBottom];
-            
-            let CollidedWithPaddle = false;
-
-            BallPoints.forEach(point=>{
-                if(point >= PaddleTop && point <= PaddleBottom || point <= PaddleBottom && point >= PaddleTop){
-                    CollidedWithPaddle = true;
-                }
-            })
-            //collided with player
-            if(CollidedWithPaddle){
-                let newY;
-                //check where it collided
-
-                //direct middle collision
-                if(BallMiddle === PaddleMiddle){
-                    newY = "none";
-                }
-                BallPoints.forEach(point=>{
-                    //collided somewhere on the top
-                    if(point < PaddleMiddle && point > PaddleTop){
-                        newY = "-";
-                    }
-                    //collided somewhere on the bottom
-                    else if(point > PaddleMiddle && point < PaddleBottom){
-                        newY = "+";
-                    }
-                })
-                this.props.collidedWithAI(newY);
-            }
+            this.checkWin(BallTop,BallMiddle,BallBottom,"ai");
         }
     }
 

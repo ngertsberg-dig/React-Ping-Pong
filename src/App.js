@@ -25,13 +25,15 @@ class App extends React.Component{
       top: 0,
       height: 100,
       width: 10,
-      moveSpeed: 30,
+      moveSpeed: 5,
+      movingDown: false,
+      movingUp: false
     },
     AIPaddle: {
       top: 0,
       height: 100,
       width: 10,
-      moveSpeed: 30,
+      moveSpeed: 0,
       left: 0
     }
   }
@@ -46,7 +48,10 @@ class App extends React.Component{
     this.updateAI = this.updateAI.bind(this);
     this.collidedWithAI = this.collidedWithAI.bind(this);
     this.playerLost = this.playerLost.bind(this);
+    this.aiLost = this.aiLost.bind(this);
     this.restartGame = this.restartGame.bind(this);
+    this.playerPaddleMovementStart= this.playerPaddleMovementStart.bind(this);
+    this.playerPaddleMovementStop = this.playerPaddleMovementStop.bind(this);
   }
 
   componentDidMount(){
@@ -54,10 +59,62 @@ class App extends React.Component{
     const Board = document.querySelector("#GameBoard");
     const Ball = document.querySelector("#Ball");
     this.setPositions(Board);
-    this.startGame();
   }
+  incrementBallSpeed(){
+    this.setState(state=>{
+      let newBall = {...state.ball};
+      newBall.moveSpeed = state.ball.moveSpeed + 2;
+      return { ball: newBall }
+    })
+  }
+  setDifficulty(e){
+    const difficulty = parseInt(e.target.getAttribute("data-level"));
+    this.setState(state=>{
+      let newAI = {...state.AIPaddle};
+      newAI.moveSpeed = difficulty;
+      return { AIPaddle: newAI }
+    },()=>{this.startGame()});
+    
+  }
+  playerPaddleMovementStop(key){
+    const keyCode = key.keyCode;
+    const moveUpKeyCode = 87;
+    const moveDownKeyCode = 83;
+    this.setState(state=>{
+      let newPaddle = { ...state.paddle};
+      if(keyCode === moveUpKeyCode){
+        newPaddle.movingUp = false;
+      }
+      if(keyCode === moveDownKeyCode){
+        newPaddle.movingDown = false;
+      }
+      return { paddle: newPaddle }
+    })
+  }
+
+  playerPaddleMovementStart(key){
+    const keyCode = key.keyCode;
+    const moveUpKeyCode = 87;
+    const moveDownKeyCode = 83;
+    this.setState(state=>{
+      let newPaddle = { ...state.paddle};
+      if(keyCode === moveUpKeyCode){
+        newPaddle.movingUp = true;
+      }
+      if(keyCode === moveDownKeyCode){
+        newPaddle.movingDown = true;
+      }
+      return { paddle: newPaddle }
+    })
+  }
+
   startGame(){
-    this.setState({ gameLoading: false })
+    this.setState({ gameLoading: false });
+    setTimeout(()=>{
+      setInterval(()=>{
+        this.incrementBallSpeed();
+      },3000)
+    },10000)
   }
   setPositions(Board){
     //set initial positions
@@ -134,7 +191,10 @@ class App extends React.Component{
   }
 
   playerLost(){
-    this.setState({gameOver:true});
+    this.setState({gameOver:true,gameWinner:"AI"});
+  }
+  aiLost(){
+    this.setState({gameOver:true, gameWinner:"Player"})
   }
 
   restartGame(){
@@ -154,6 +214,8 @@ class App extends React.Component{
                     gameOver = {this.state.gameOver} 
                     updatePaddleTop = {this.updatePaddleTop} 
                     paddleState = {this.state.paddle} 
+                    playerPaddleMovementStart = {this.playerPaddleMovementStart}
+                    playerPaddleMovementStop = {this.playerPaddleMovementStop}
                   />
 
                   <Ball
@@ -167,6 +229,7 @@ class App extends React.Component{
                     paddleState = {this.state.paddle} 
                     aiPaddleState = {this.state.AIPaddle}
                     collidedWithAI = {this.collidedWithAI}
+                    aiLost = {this.aiLost}
                   />
 
                   <AIPaddle
@@ -177,10 +240,28 @@ class App extends React.Component{
                   />
                 </React.Fragment>
         }
+        { this.state.gameLoading && (
+          <div id = 'select-difficulty'>
+            <div id = 'gameControls'>
+              <div id = 'keys'>
+                <span><div data-key='65' className='key__button'>W</div> Move Paddle Up</span>
+                <span><div data-key='65' className='key__button'>S</div> Move Paddle Down</span>
+              </div>
+            </div>
+            <p>Select an AI difficulty</p>
+            <ul>
+              <li onClick = {(e)=>this.setDifficulty(e)} data-level = "10">Super easy..</li>
+              <li onClick = {(e)=>this.setDifficulty(e)} data-level = "15">Medium</li>
+              <li onClick = {(e)=>this.setDifficulty(e)} data-level = "18">Hard</li>
+              <li onClick = {(e)=>this.setDifficulty(e)} data-level = "21">Harder.</li>
+              <li onClick = {(e)=>this.setDifficulty(e)} data-level = "30">Boss Mode</li>
+            </ul>
+          </div>
+        )}
         {
           this.state.gameOver &&(
             <div id = 'gameOver'>
-              <h1>You Lost..</h1>
+              <h1>{this.state.gameWinner == "Player" ? "You won!": "You Lost..."}</h1>
               <button onClick = {this.restartGame} id = 'restartGame'>Restart</button>
             </div>
           )

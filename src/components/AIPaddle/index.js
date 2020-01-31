@@ -18,7 +18,7 @@ class AIPaddle extends React.Component{
         const BallMiddle = (BallHeight / 2) + BallTop;
         const PaddleTop = paddleState.top;
         let newTop = PaddleTop;
-
+        console.log(paddleState.moveSpeed)
         if(BallMiddle > PaddleMiddle){
             //move aipaddle down
             newTop = PaddleTop + paddleState.moveSpeed;
