@@ -64,7 +64,9 @@ class AIPaddle extends React.Component{
         }
         return(
             <div style = {PaddleStyle} id = 'AIPaddle'>
-
+                <span className="speech-bubble">
+                    <p>GG EZ LOL</p>
+                </span>
             </div>
         )
     }

@@ -55,7 +55,7 @@ class Ball extends React.Component{
             whoToCheck === "player" ? this.props.playerLost() : this.props.aiLost();
         }
     }
-    
+
     ballMove(Ball){
         const { ballState } = this.props;
         

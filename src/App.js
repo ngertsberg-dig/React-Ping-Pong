@@ -192,6 +192,9 @@ class App extends React.Component{
 
   playerLost(){
     this.setState({gameOver:true,gameWinner:"AI"});
+    if(this.state.AIPaddle.moveSpeed === 30){
+      document.querySelector("#AIPaddle span").classList.add("ggez")
+    }
   }
   aiLost(){
     this.setState({gameOver:true, gameWinner:"Player"})

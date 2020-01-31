@@ -80,3 +80,30 @@ html,body
 .key__button:hover, .key__button:focus 
   box-shadow: 0 0 1px #888, 0 1px 0 #fff, 0 4px 0 #C0C0C0, 0 2px 35px rgba(68, 68, 68, 0.3), 2px 2px 4px rgba(68, 68, 68, 0.25), -2px 2px 4px rgba(68, 68, 68, 0.25), 0 7px 4px rgba(68, 68, 68, 0.1)
   transform: translateY(2px)
+
+
+.speech-bubble 
+    background-color: red
+    position: absolute
+    left: -100px
+    top: -75px
+    border: 1px solid gold   
+    padding: 0px 5px 
+    border-radius: 5px
+    display: none
+    &.ggez
+        display: initial
+
+.speech-bubble:after 
+	content: ''
+	position: absolute
+	bottom: 0
+	left: 65%
+	width: 0
+	height: 0
+	border: 20px solid transparent
+	border-top-color: red
+	border-bottom: 0
+	border-right: 0
+	margin-left: 0px
+	margin-bottom: -20px
