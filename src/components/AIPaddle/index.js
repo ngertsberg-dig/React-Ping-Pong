@@ -33,11 +33,34 @@ class AIPaddle extends React.Component{
     }
     render(){
         const { paddleState } = this.props;
+        const { moveSpeed } = paddleState;
+        let PaddleColor;
+        let boxShadow = "none";
+        if(moveSpeed == 10){
+            PaddleColor = "rgba(0,255,0)";
+        }
+        if(moveSpeed === 15){
+            PaddleColor = "green";
+        }
+        if(moveSpeed === 18){
+            PaddleColor = "rgb(240, 128, 31)"
+        }
+        if(moveSpeed > 20){
+            PaddleColor = "red";
+        }
+        if(moveSpeed === 30){
+            boxShadow = "4px 0px 61px 24px rgba(255,0,0,0.92)"
+        }
+        
+       
         const PaddleStyle = {
             top: `${paddleState.top}px`,
             width: `${paddleState.width}px`,
             height: `${paddleState.height}px`,
             left: `${paddleState.left}px`,
+            backgroundColor: PaddleColor,
+            boxShadow
+            
         }
         return(
             <div style = {PaddleStyle} id = 'AIPaddle'>
