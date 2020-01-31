@@ -3,18 +3,17 @@ import React from 'react';
 class Ball extends React.Component{
 
     componentDidMount(){
-        
         const Ball = document.querySelector("#Ball");
-        // const moveBall = setInterval(() => {
-        //     this.ballMove(Ball);
-        //     if(this.props.gameOver){
-        //         setTimeout(()=>{
-        //             clearInterval(moveBall);
-        //         },100)
-        //     }
-        // },25);
-
+        const moveBall = setInterval(() => {
+            this.ballMove(Ball);
+            if(this.props.gameOver){
+                setTimeout(()=>{
+                    clearInterval(moveBall);
+                },100)
+            }
+        },25);
     }
+
     checkWin(BallTop,BallMiddle,BallBottom,whoToCheck){
         const PlayerPaddle = whoToCheck === "player" ? document.querySelector("#PlayerPaddle") : document.querySelector("#AIPaddle");
         const PaddleTop = PlayerPaddle.offsetTop;
@@ -56,6 +55,7 @@ class Ball extends React.Component{
             whoToCheck === "player" ? this.props.playerLost() : this.props.aiLost();
         }
     }
+    
     ballMove(Ball){
         const { ballState } = this.props;
         
